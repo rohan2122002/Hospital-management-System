@@ -1,0 +1,49 @@
+pip install mysql-connector-python
+import tkinter as tk
+from tkinter import messagebox
+import mysql.connector
+
+# Connect to MySQL
+conn = mysql.connector.connect(
+    host="localhost",
+    user="root",
+    password="",  # Replace with your MySQL password
+    database="hospital_db"
+)
+cursor = conn.cursor()
+
+# Insert Patient Function
+def insert_patient():
+    name = entry_name.get()
+    age = entry_age.get()
+    gender = entry_gender.get()
+    address = entry_address.get()
+
+    query = "INSERT INTO patients (name, age, gender, address) VALUES (%s, %s, %s, %s)"
+    cursor.execute(query, (name, age, gender, address))
+    conn.commit()
+    messagebox.showinfo("Success", "Patient added successfully!")
+
+# Tkinter GUI
+app = tk.Tk()
+app.title("Hospital Management System")
+
+tk.Label(app, text="Patient Name").grid(row=0, column=0)
+entry_name = tk.Entry(app)
+entry_name.grid(row=0, column=1)
+
+tk.Label(app, text="Age").grid(row=1, column=0)
+entry_age = tk.Entry(app)
+entry_age.grid(row=1, column=1)
+
+tk.Label(app, text="Gender").grid(row=2, column=0)
+entry_gender = tk.Entry(app)
+entry_gender.grid(row=2, column=1)
+
+tk.Label(app, text="Address").grid(row=3, column=0)
+entry_address = tk.Entry(app)
+entry_address.grid(row=3, column=1)
+
+tk.Button(app, text="Add Patient", command=insert_patient).grid(row=4, column=0, columnspan=2, pady=10)
+
+app.mainloop()
